@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>New-ServerRestart</AssemblyName>
+    <ApplicationIcon></ApplicationIcon>
+    <OutputType>WinExe</OutputType>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <TargetFrameworks>net48;net6.0-windows;net7.0-windows</TargetFrameworks>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <DebugType>None</DebugType>
+    <Configuration>Release</Configuration>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile Condition="'$(TargetFramework)' != 'net48'">true</PublishSingleFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\New-ServerRestart.ps1">
+        <LogicalName>Script.ps1</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="Cleanup" AfterTargets="Clean">
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+    <RemoveDir Directories="$(BaseOutputPath)"/>
+  </Target>
+
+</Project>
