@@ -8,6 +8,8 @@ This repository contains all files required to build the **New-ServerRestart** S
 ## Purpose
 The **New-ServerRestart** script launches a Windows form that provides a method to schedule a one time restart on a remote server.
 
+![Screenshot 2023-05-17 211734](https://github.com/Smart-Ace-Designs/New-ServerRestart/assets/132539186/5c606b54-caf6-4198-b525-60e85f241daa)
+
 ## Requirements
 - This project supports the following command shells:
     - [Windows PowerShell 5.1](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-5.1)
