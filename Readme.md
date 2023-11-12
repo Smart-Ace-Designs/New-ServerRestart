@@ -1,8 +1,6 @@
-# **New-ServerRestart**
-
+# New-ServerRestart
 **Warning:** This ScriptoForm is for demonstration purposes only and not intended for use in a production environment.
 
-## Introduction
 This repository contains all files required to build the **New-ServerRestart** ScriptoForm project.  A *ScriptoForm* ("Script Oh Form") is a PowerShell script that generates and displays a [Microsoft Windows Forms](https://learn.microsoft.com/en-us/dotnet/desktop/winforms/overview/?view=netdesktop-7.0#introduction) application that can be used for a specific management or system administration task in a network environment.  A *ScriptoForm project* is the set of files and folders, including the PowerShell script, that can be compiled into an executable file using the Microsoft .NET CLI utility (dotnet.exe) which is available with any [Microsoft .NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet).  Included in the repository is the Build.cs C# file which the compiler will use as the source for the executable, and the Build.csproj C# project file which provides the set of instructions used to compile the executable.
 
 ## Purpose
