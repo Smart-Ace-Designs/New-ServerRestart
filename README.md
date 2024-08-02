@@ -12,12 +12,10 @@ The **New-ServerRestart** script launches a Windows form that provides a method 
 - This project supports the following command shells:
     - [Windows PowerShell 5.1](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-5.1)
     - [PowerShell 7.2.x](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.2)
-    - [PowerShell 7.3.x](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.3)
     - [PowerShell 7.4.x](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.4)
 - This project supports the following Microsoft .NET frameworks:
     - [Microsoft .NET 4.x](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
     - [Microsoft .NET 6.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-    - [Microsoft .NET 7.x](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
     - [Microsoft .NET 8.x](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ## Compile Instructions
@@ -40,13 +38,6 @@ Microsoft .NET 6.x Framework
 ``dotnet publish -f net6.0-windows -v q -nologo -o ..\Release\LTS-Legacy; dotnet clean -f net6.0-windows -v q -nologo``
 - The compiled executable will be created in the *Release\LTS-Legacy* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` parameter in the above command.
 - The latest [Microsoft .NET 6.x Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) will be required on any computer used to run the executable.
-
-Microsoft .NET 7.x Framework
-- Open a supported command shell and navigate to the *Build* subdirectory in your local repository directory.
-- Run the following command from within your *Build* subdirectory:<br>
-``dotnet publish -f net7.0-windows -v q -nologo -o ..\Release\STS; dotnet clean -f net7.0-windows -v q -nologo``
-- The compiled executable will be created in the *Release\STS* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` parameter in the above command.
-- The latest [Microsoft .NET 7.x Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) will be required on any computer used to run the executable.
 
 Microsoft .NET 8.x Framework
 - Open a supported command shell and navigate to the *Build* subdirectory in your local repository directory.
