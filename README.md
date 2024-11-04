@@ -51,8 +51,8 @@ Microsoft .NET 9.x Framework
 - The executable will attempt to use the latest version of PowerShell discovered on the local machine to execute the extracted script file unless excluded by one of the command-line arguments noted below.  If a version of PowerShell is excluded by a command-line argument then the executable will attempt to use the next latest version of PowerShell discovered on the system.  The executable will always default to using Windows PowerShell if no other versions are available for use.
 - After the PowerShell script execution has completed, all extracted files and the extraction directory are deleted and the executable terminates.
 - The following optional command-line arguments can be used to control operation of the executable:
-  | Argument          | Purpose                           | Notes                                             |
-  | ----------------- | --------------------------------- | ------------------------------------------------- |
-  | -exclude:all      | Exclude PowerShell x.x.x versions | Do not use with other *exclude* arguments         |
-  | -exclude:ps7      | Exclude PowerShell 7.x.x versions | Do not use with other *exclude* arguments         |
-  | -debug            | Show console window               | Use individually or with an *exclude* argument    |
+  | Argument     | Purpose                           | Notes                                          |
+  | ------------ | --------------------------------- | ---------------------------------------------- |
+  | -exclude:all | Exclude PowerShell x.x.x versions | Do not use with other *exclude* arguments      |
+  | -exclude:ps7 | Exclude PowerShell 7.x.x versions | Do not use with other *exclude* arguments      |
+  | -debug       | Show console window               | Use individually or with an *exclude* argument |
