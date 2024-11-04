@@ -9,12 +9,12 @@ This script schedules a one time restart on a remote server.
 #>
 
 #region Settings
-$SupportContact = "Smart Ace Designs"
-$TaskAction = "Shutdown.exe"
-$TaskArgument = "/r /t 1"
-$TaskName = "One-time Restart"
-$TaskPath = "CorporationName"
-$TaskUser = "System"
+$SUPPORT_CONTACT = "Smart Ace Designs"
+$TASK_ACTION = "Shutdown.exe"
+$TASK_ARGUMENT = "/r /t 1"
+$TASK_NAME = "One-time Restart"
+$TASK_PATH = "CorporationName"
+$TASK_USER = "System"
 #endregion
 
 #region Assemblies
@@ -172,14 +172,14 @@ $ButtonRun_Click =
             $StatusStripMain.Update()
             $Trigger = New-ScheduledTaskTrigger -Once -At "$RestartDate $RestartTime"
             $Trigger.EndBoundary = [datetime]::Parse("$RestartDate $RestartTime").AddMinutes(5).ToString('s')
-            $Action = New-ScheduledTaskAction -Execute $TaskAction -Argument $TaskArgument
+            $Action = New-ScheduledTaskAction -Execute $TASK_ACTION -Argument $TASK_ARGUMENT
             $Settings = New-ScheduledTaskSettingsSet -DeleteExpiredTaskAfter 00:00:00
             Invoke-Command -ComputerName $ServerName -ScriptBlock {
-                if (Get-ScheduledTask -TaskName $Using:TaskName -TaskPath "\$Using:TaskPath\" -ErrorAction SilentlyContinue)
+                if (Get-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -ErrorAction SilentlyContinue)
                 {
-                    Unregister-ScheduledTask -TaskName $Using:TaskName -TaskPath "\$Using:TaskPath\" -Confirm:$false
+                    Unregister-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -Confirm:$false
                 }
-                Register-ScheduledTask -TaskName $Using:TaskName -Action $Using:Action -Trigger $Using:Trigger -TaskPath $Using:TaskPath -Settings $Using:Settings -User $Using:TaskUser
+                Register-ScheduledTask -TASK_NAME $Using:TASK_NAME -Action $Using:Action -Trigger $Using:Trigger -TASK_PATH $Using:TASK_PATH -Settings $Using:Settings -User $Using:TASK_USER
             }
             [void][System.Windows.Forms.MessageBox]::Show(
                 "A one-time restart on $ServerName has been scheduled.`n`nDate:`t$RestartDate`nTime:`t$RestartTime",
@@ -201,7 +201,7 @@ $ButtonRun_Click =
     catch
     {
         [void][System.Windows.Forms.MessageBox]::Show(
-            $PSItem.Exception.Message + "`n`nPlease contact $SupportContact for technical support.",
+            $PSItem.Exception.Message + "`n`nPlease contact $SUPPORT_CONTACT for technical support.",
             "Exception",
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Warning
