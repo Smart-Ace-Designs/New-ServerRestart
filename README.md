@@ -53,6 +53,6 @@ Microsoft .NET 9.x Framework
 - The following optional command-line arguments can be used to control operation of the executable:
   | Argument          | Purpose                           | Notes                                                       |
   | ----------------- | --------------------------------- | ------------------------------------------------------------|
-  | -Exclude:ALL      | Exclude PowerShell x.x.x versions | Do not use with other *Exclude* parameters                  |
-  | -Exclude:PS7      | Exclude PowerShell 7.x.x versions | Do not use with other *Exclude* parameters                  |
-  | -Debug            | Show console window               | Use individually or with one additional *Exclude* parameter |
+  | -exclude:all      | Exclude PowerShell x.x.x versions | Do not use with other *exclude* parameters                  |
+  | -exclude:ps7      | Exclude PowerShell 7.x.x versions | Do not use with other *exclude* parameters                  |
+  | -debug            | Show console window               | Use individually or with one additional *exclude* parameter |
