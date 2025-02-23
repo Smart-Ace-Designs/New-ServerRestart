@@ -28,22 +28,22 @@ Use any of the below workflows to create an executable file of the PowerShell sc
 Microsoft .NET 4.x Framework
 - Open a supported command shell and navigate to the *Build* subdirectory in your local repository directory.
 - Run the following command from within your *Build* subdirectory:<br>
-``dotnet publish -f net48 -v q -nologo -o ..\Release\Legacy; dotnet clean -f net48 -v q -nologo``
+``dotnet publish -f net48 -v q -o ..\Release\Legacy; dotnet clean -f net48 -v q``
 - The compiled executable will be created in the *Release\Legacy* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` argument in the above command.
 - The latest [Microsoft .NET 4.x Framework Runtime](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) will be required on any computer used to run the executable.
 
 Microsoft .NET 8.x Framework
 - Open a supported command shell and navigate to the *Build* subdirectory in your local repository directory.
 - Run the following command from within your *Build* subdirectory:<br>
-``dotnet publish -f net8.0-windows -v q -nologo -o ..\Release\LTS; dotnet clean -f net8.0-windows -v q -nologo``
+``dotnet publish -f net8.0-windows -v q -o ..\Release\LTS; dotnet clean -f net8.0-windows -v q``
 - The compiled executable will be created in the *Release\LTS* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` argument in the above command.
 - The latest [Microsoft .NET 8.x Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) will be required on any computer used to run the executable.
 
 Microsoft .NET 9.x Framework
 - Open a supported command shell and navigate to the *Build* subdirectory in your local repository directory.
 - Run the following command from within your *Build* subdirectory:<br>
-``dotnet publish -f net9.0-windows -v q -nologo -o ..\Release\LTS-Legacy; dotnet clean -f net9.0-windows -v q -nologo``
-- The compiled executable will be created in the *Release\LTS-Legacy* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` argument in the above command.
+``dotnet publish -f net9.0-windows -v q -o ..\Release\STS; dotnet clean -f net9.0-windows -v q``
+- The compiled executable will be created in the *Release\STS* subdirectory of your local repository directory.  This location can be changed by modifying the ``-o`` argument in the above command.
 - The latest [Microsoft .NET 9.x Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) will be required on any computer used to run the executable.
 
 ## Executable Notes
