@@ -125,6 +125,36 @@ $ShowFormMain =
 }
 #endregion
 
+#region Functions
+function Invoke-FormAction
+{
+    param
+    (
+        [Parameter(Mandatory, Position = 0)] [ScriptBlock]$Action,
+        [Parameter(Position = 1)] [ScriptBlock]$Reset = $null
+    )
+
+    try
+    {
+        $ToolStripStatusLabelMain.Text = "Working...please wait"
+        $FormMain.Controls | Where-Object {$PSItem -isnot [System.Windows.Forms.StatusStrip]} | ForEach-Object {$PSItem.Enabled = $false}
+        $FormMain.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
+        [System.Windows.Forms.Application]::DoEvents()
+        
+        & $Action
+    }
+    
+    finally
+    {
+        $FormMain.Controls | ForEach-Object {$PSItem.Enabled = $true}
+        $FormMain.ResetCursor()
+        if ($Reset) {& $Reset}
+        $ToolStripStatusLabelMain.Text = "Ready"
+        $StatusStripMain.Update()
+    }
+}
+#endregion
+
 #region Handlers
 $FormMain_Shown =
 {
@@ -155,67 +185,61 @@ $TextBoxName_TextChanged =
 
 $ButtonRun_Click = 
 {
-    $FormMain.Controls | Where-Object {$PSItem -isnot [System.Windows.Forms.StatusStrip]} | ForEach-Object {$PSItem.Enabled = $false}
-    $FormMain.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
-    [System.Windows.Forms.Application]::DoEvents()
-
-    try
-    {
-        $ToolStripStatusLabelMain.Text = "Testing connection to remote server..."
-        $StatusStripMain.Update()
-        $ServerName = $TextBoxName.Text.Trim()
-        $RestartTime = $TextBoxTime.Text.Trim()
-        $RestartDate = $DateTimePickerDate.Text.Trim()
-        if (Test-Connection $ServerName -quiet -count 1)
+    Invoke-FormAction -Action {
+        try
         {
-            $ToolStripStatusLabelMain.Text = "Scheduling restart..."
+            $ToolStripStatusLabelMain.Text = "Testing connection to remote server..."
             $StatusStripMain.Update()
-            $Trigger = New-ScheduledTaskTrigger -Once -At "$RestartDate $RestartTime"
-            $Trigger.EndBoundary = [datetime]::Parse("$RestartDate $RestartTime").AddMinutes(5).ToString('s')
-            $Action = New-ScheduledTaskAction -Execute $TASK_ACTION -Argument $TASK_ARGUMENT
-            $Settings = New-ScheduledTaskSettingsSet -DeleteExpiredTaskAfter 00:00:00
-            Invoke-Command -ComputerName $ServerName -ScriptBlock {
-                if (Get-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -ErrorAction SilentlyContinue)
-                {
-                    Unregister-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -Confirm:$false
+            $ServerName = $TextBoxName.Text.Trim()
+            $RestartTime = $TextBoxTime.Text.Trim()
+            $RestartDate = $DateTimePickerDate.Text.Trim()
+            if (Test-Connection $ServerName -Quiet -Count 1)
+            {
+                $ToolStripStatusLabelMain.Text = "Scheduling restart..."
+                $StatusStripMain.Update()
+                $Trigger = New-ScheduledTaskTrigger -Once -At "$RestartDate $RestartTime"
+                $Trigger.EndBoundary = [datetime]::Parse("$RestartDate $RestartTime").AddMinutes(5).ToString('s')
+                $Action = New-ScheduledTaskAction -Execute $TASK_ACTION -Argument $TASK_ARGUMENT
+                $Settings = New-ScheduledTaskSettingsSet -DeleteExpiredTaskAfter 00:00:00
+                Invoke-Command -ComputerName $ServerName -ScriptBlock {
+                    if (Get-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -ErrorAction SilentlyContinue)
+                    {
+                        Unregister-ScheduledTask -TASK_NAME $Using:TASK_NAME -TASK_PATH "\$Using:TASK_PATH\" -Confirm:$false
+                    }
+                    Register-ScheduledTask -TASK_NAME $Using:TASK_NAME -Action $Using:Action -Trigger $Using:Trigger -TASK_PATH $Using:TASK_PATH -Settings $Using:Settings -User $Using:TASK_USER
                 }
-                Register-ScheduledTask -TASK_NAME $Using:TASK_NAME -Action $Using:Action -Trigger $Using:Trigger -TASK_PATH $Using:TASK_PATH -Settings $Using:Settings -User $Using:TASK_USER
+                [void][System.Windows.Forms.MessageBox]::Show(
+                    "A one-time restart on $ServerName has been scheduled.`n`nDate:`t$RestartDate`nTime:`t$RestartTime",
+                    "Task Scheduled",
+                    [System.Windows.Forms.MessageBoxButtons]::OK,
+                    [System.Windows.Forms.MessageBoxIcon]::Information
+                )
             }
-            [void][System.Windows.Forms.MessageBox]::Show(
-                "A one-time restart on $ServerName has been scheduled.`n`nDate:`t$RestartDate`nTime:`t$RestartTime",
-                "Task Scheduled",
-                [System.Windows.Forms.MessageBoxButtons]::OK,
-                [System.Windows.Forms.MessageBoxIcon]::Information
-            )
+            else
+            {
+                [void][System.Windows.Forms.MessageBox]::Show(
+                    "The server $ServerName is not responding.`n`nPlease verify the name is correct and the server is online.",
+                    "Communication Problem",
+                    [System.Windows.Forms.MessageBoxButtons]::OK,
+                    [System.Windows.Forms.MessageBoxIcon]::Warning
+                )
+            }
         }
-        else
+        catch
         {
             [void][System.Windows.Forms.MessageBox]::Show(
-                "The server $ServerName is not responding.`n`nPlease verify the name is correct and the server is online.",
-                "Communication Problem",
+                $PSItem.Exception.Message + "`n`nPlease contact $SUPPORT_CONTACT for technical support.",
+                "Exception",
                 [System.Windows.Forms.MessageBoxButtons]::OK,
                 [System.Windows.Forms.MessageBoxIcon]::Warning
             )
         }
+    } -Reset {
+        $ErrorProviderMain.Clear()
+        $ButtonRun.Enabled = $false
+        $TextBoxName.Clear()
+        $TextBoxName.Focus()
     }
-    catch
-    {
-        [void][System.Windows.Forms.MessageBox]::Show(
-            $PSItem.Exception.Message + "`n`nPlease contact $SUPPORT_CONTACT for technical support.",
-            "Exception",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Warning
-        )
-    }
-
-    $FormMain.Controls | ForEach-Object {$PSItem.Enabled = $true}
-    $FormMain.ResetCursor()
-    $ErrorProviderMain.Clear()
-    $ButtonRun.Enabled = $false
-    $TextBoxName.Clear()
-    $TextBoxName.Focus()
-    $ToolStripStatusLabelMain.Text = "Ready"
-    $StatusStripMain.Update()
 }
 #endregion
 
