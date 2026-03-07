@@ -131,12 +131,13 @@ function Invoke-FormAction
     param
     (
         [Parameter(Mandatory, Position = 0)] [ScriptBlock]$Action,
-        [Parameter(Position = 1)] [ScriptBlock]$Reset = $null
+        [Parameter(Position = 1)] [ScriptBlock]$Reset = $null,
+        [Parameter(Position = 2)] [String]$StatusText = "Working...please wait"
     )
 
     try
     {
-        $ToolStripStatusLabelMain.Text = "Working...please wait"
+        $ToolStripStatusLabelMain.Text = $StatusText
         $FormMain.Controls | Where-Object {$PSItem -isnot [System.Windows.Forms.StatusStrip]} | ForEach-Object {$PSItem.Enabled = $false}
         $FormMain.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
         [System.Windows.Forms.Application]::DoEvents()
