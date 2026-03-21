@@ -141,15 +141,14 @@ function Invoke-FormAction
         $FormMain.Controls | Where-Object {$PSItem -isnot [System.Windows.Forms.StatusStrip]} | ForEach-Object {$PSItem.Enabled = $false}
         $FormMain.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
         [System.Windows.Forms.Application]::DoEvents()
-        
-        & $Action
+        Invoke-Command -ScriptBlock $Action
     }
     
     finally
     {
         $FormMain.Controls | ForEach-Object {$PSItem.Enabled = $true}
         $FormMain.ResetCursor()
-        if ($Reset) {& $Reset}
+        if ($Reset) {Invoke-Command -ScriptBlock $Reset}
         $ToolStripStatusLabelMain.Text = "Ready"
         $StatusStripMain.Update()
     }
