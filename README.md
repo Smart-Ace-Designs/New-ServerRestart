@@ -13,6 +13,7 @@ The **New-ServerRestart** script launches a Windows form that provides a method 
 - This project supports the following command shells:
     - [Windows PowerShell 5.1](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-5.1)
     - [PowerShell 7.6.x](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.6)
+    - [PowerShell 7.7.x](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.7)
 - This project supports the following Microsoft .NET frameworks:
     - [Microsoft .NET 4.x](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
     - [Microsoft .NET 10.x](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
