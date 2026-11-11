@@ -5,7 +5,9 @@ using System.IO;
 using System.Reflection;
 
 [assembly:AssemblyCopyright("Smart Ace Designs")]
-[assembly:AssemblyFileVersion("1.0.0.0")]
+[assembly:AssemblyVersion("1.1.0.0")]
+[assembly:AssemblyFileVersion("1.1.0.0")]
+[assembly:AssemblyInformationalVersion("1.1.0.0")]
 [assembly:AssemblyProduct("PowerShell SmartLaunch Utility")]
 [assembly:AssemblyTitle("PowerShell SmartLaunch Utility")]
 
@@ -28,6 +30,28 @@ namespace SmartLaunch
 
     class Program
     {
+        // Function: Resolves either the MSIX alias path or traditional MSI path
+        private static string GetPWSH7Path()
+        {
+            // Test for the MSIX execution alias
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string msixAliasPath = Path.Combine(localAppData, @"Microsoft\WindowsApps\pwsh.exe");
+
+            if (File.Exists(msixAliasPath))
+            {
+                return msixAliasPath;
+            }
+                        
+            // Fallback test for the MSI installation path
+            if (File.Exists(Globals.PWSH7))
+            {
+                return Globals.PWSH7;
+            }
+            
+            // Return empty string if neither is found
+            return string.Empty;
+        }
+
         // Function: Generate unique extraction directory
         private static string GenerateExtractionDirectory()
         {
@@ -143,19 +167,22 @@ namespace SmartLaunch
                     // Hide PowerShell console window
                     powershellProcess.StartInfo.Arguments = "-NoLogo -NoProfile -Window Hidden -File " + extractionPath + "\\" + Globals.ScriptName;
                     powershellProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    powershellProcess.StartInfo.UseShellExecute = true;
                 }
 
+                // Allow Windows to unwrap an MSIX app execution alias smoothly
+                powershellProcess.StartInfo.UseShellExecute = true;
+
                 // Select the version of PowerShell to use
-                if (File.Exists(Globals.PWSH7) && excludedPowershellVersion != Globals.Args_ExcludePWSH7 && excludedPowershellVersion != Globals.Args_ExcludeAll)
+                string pwsh7Path = GetPWSH7Path();
+                if (!string.IsNullOrEmpty(pwsh7Path) && excludedPowershellVersion != Globals.Args_ExcludePWSH7 && excludedPowershellVersion != Globals.Args_ExcludeAll)
                 {
-                    powershellProcess.StartInfo.FileName = Globals.PWSH7;
+                    powershellProcess.StartInfo.FileName = pwsh7Path;
                 }
                 else
                 {
                     powershellProcess.StartInfo.FileName = Globals.PSWIN;
                 }
-
+                
                 // Execute the script using the selected version of PowerShell
                 powershellProcess.Start();
                 powershellProcess.WaitForExit();
